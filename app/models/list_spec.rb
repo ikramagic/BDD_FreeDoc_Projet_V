@@ -1,4 +1,4 @@
 class ListSpec < ApplicationRecord
-    has_many :specialtys
-	has_many :doctors
+    belongs_to :specialty
+	belongs_to :doctor
 end
