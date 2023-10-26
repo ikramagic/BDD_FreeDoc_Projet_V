@@ -6,6 +6,7 @@ require 'faker'
 Appointment.destroy_all
 Doctor.destroy_all
 Patient.destroy_all
+ListSpec.destroy_all
 Specialty.destroy_all
 
 #ATTENTION: l'ordre est important pour le destroy_all.
@@ -14,10 +15,21 @@ Specialty.destroy_all
 
 all_existing_doctors = []
 all_existing_patients = []
+all_medical_fields = []
 
 french_cities = ["Paris", "Marseille", "Lyon", "Toulouse", "Nice", "Nantes", "Strasbourg", "Montpellier", "Bordeaux", "Lille", "Rennes", "Reims", "Le Havre", "Cannes", "Limoges", "Dijon", "Amiens", "Angers", "Perpignan", "Besançon"]
-#medical_fields = ["Cardiologie", "Dermatologie", "Gastro-entérologie", "Gynécologie", "Hématologie", "Néphrologie", "Neurologie", "Oncologie", "Ophtalmologie", "Orthopédie", "Oto-rhino-laryngologie (ORL)", "Pédiatrie", "Pneumologie", "Psychiatrie", "Radiologie", "Rhumatologie", "Urologie", "Chirurgie générale", "Chirurgie plastique", "Chirurgie cardiaque", "Chirurgie thoracique", "Chirurgie vasculaire", "Endocrinologie", "Infectiologie", "Médecine interne", "Médecine du travail", "Médecine d'urgence", "Médecine nucléaire", "Médecine légale", "Médecine du sport"]
 french_zip_codes = ["75001", "69002", "13003", "34000", "33005", "59006", "69007", "75008", "13009", "69010", "31011", "13012", "75013", "69014", "34015", "59016", "75017", "13018", "69019", "33020"]
+
+10.times do 
+
+    medical_fields = ["Cardiologie", "Dermatologie", "Gastro-entérologie", "Gynécologie", "Hématologie", "Néphrologie", "Neurologie", "Oncologie", "Ophtalmologie", "Orthopédie", "Oto-rhino-laryngologie (ORL)", "Pédiatrie", "Pneumologie", "Psychiatrie", "Radiologie", "Rhumatologie", "Urologie", "Chirurgie générale", "Chirurgie plastique", "Chirurgie cardiaque", "Chirurgie thoracique", "Chirurgie vasculaire", "Endocrinologie", "Infectiologie", "Médecine interne", "Médecine du travail", "Médecine d'urgence", "Médecine nucléaire", "Médecine légale", "Médecine du sport"]
+
+    new_spec = Specialty.create(
+        title: medical_fields.sample
+    )
+
+    all_medical_fields << new_spec
+end
 
 10.times do 
     new_doctor = Doctor.create(
@@ -40,23 +52,23 @@ end
     all_existing_patients << new_patient
 end
 
-10.times do 
+20.times do 
     appointed_doctor = all_existing_doctors.sample
     appointed_patient = all_existing_patients.sample
+    appointed_fields = all_medical_fields.sample
+
+    doctor_spec_assignement = ListSpec.create(
+        doctor: appointed_doctor,
+        specialty: appointed_fields,
+        first_name: appointed_doctor.first_name,
+        last_name: appointed_doctor.last_name,
+        new_spec: appointed_fields.title
+    )
 
     new_appointment = Appointment.create(
         date: Faker::Time.forward(days: 60, format: :long),
         doctor: appointed_doctor,
         patient: appointed_patient,
         city: appointed_doctor.city
-    )
-end
-
-10.times do 
-
-    medical_fields = ["Cardiologie", "Dermatologie", "Gastro-entérologie", "Gynécologie", "Hématologie", "Néphrologie", "Neurologie", "Oncologie", "Ophtalmologie", "Orthopédie", "Oto-rhino-laryngologie (ORL)", "Pédiatrie", "Pneumologie", "Psychiatrie", "Radiologie", "Rhumatologie", "Urologie", "Chirurgie générale", "Chirurgie plastique", "Chirurgie cardiaque", "Chirurgie thoracique", "Chirurgie vasculaire", "Endocrinologie", "Infectiologie", "Médecine interne", "Médecine du travail", "Médecine d'urgence", "Médecine nucléaire", "Médecine légale", "Médecine du sport"]
-
-    new_spec = Specialty.create(
-        title: medical_fields.sample
     )
 end
